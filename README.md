@@ -12,5 +12,6 @@ We use a Constant Buffer in the Vertex Shader
 
 We define:
 - WVPMatrix = WorldMatrix * ViewMatrix * ProjectionMatrix
-- (with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2)
-- (Both TranslationMatrix are used to center the rotation in the middle of the texture)
+  
+(with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2)
+(Both TranslationMatrix are used to center the rotation in the middle of the texture)
