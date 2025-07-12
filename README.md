@@ -11,4 +11,4 @@ The compiled shader files (.cso) in [src/Shaders](https://github.com/DJCEL/Virtu
 We use a Constant Buffer in the Vertex Shader 
 
 We define:
-- WVPMatrix = WorldMatrix * ViewMatrix * ProjectionMatrix with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2;
+- WVPMatrix = WorldMatrix * ViewMatrix * ProjectionMatrix (with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2)
