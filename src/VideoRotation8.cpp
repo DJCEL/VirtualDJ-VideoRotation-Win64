@@ -624,7 +624,7 @@ DirectX::XMMATRIX CVideoRotation8::SetViewMatrix_D3D11()
 {
 	float cam_posX = (float) m_Width / 2.0f;
 	float cam_posY = (float) m_Height / 2.0f;
-	float cam_posZ = (float) max(m_Width, m_Height) + 100.0f;
+	float cam_posZ = (float) (max(m_Width, m_Height) + 100.0f) * (-1.0f);
 
 	float cam_tgtX = (float) m_Width / 2.0f;
 	float cam_tgtY = (float) m_Height / 2.0f;
