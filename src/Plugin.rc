@@ -68,7 +68,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "http://www.virtualdj.com/blog/djcel"
             VALUE "FileDescription", "VirtualDJ Video Effect"
-            VALUE "FileVersion", "3.0.0.0"
+            VALUE "FileVersion", "3.2.0.0"
             VALUE "InternalName", "VideoRotation"
             VALUE "LegalCopyright", "Copyright (C) 2025 djcel"
             VALUE "OriginalFilename", "VideoRotation"
