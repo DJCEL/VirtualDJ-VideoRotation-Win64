@@ -6,4 +6,4 @@ You need to download [DirectXMath](https://github.com/Microsoft/DirectXMath) (at
 
 It uses a Vertex Shader & a Pixel Shader (with Shader Model 5.0)
 
-The compiled shader files (.cso) in the 'Shaders' subfolder are then included in the Plugin.rc file (available in the 'PC' subfolder)
+The compiled shader files (.cso) in the 'Shaders' subfolder are then included in the Plugin.rc file
