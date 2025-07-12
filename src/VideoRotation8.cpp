@@ -64,7 +64,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "VideoRotation";
 	info->Description = "Rotation of the Video.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY | VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "3.0 (64-bit)";
+	info->Version = "3.2 (64-bit)";
 
 	return S_OK;
 }
