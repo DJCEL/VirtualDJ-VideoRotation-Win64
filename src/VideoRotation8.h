@@ -135,6 +135,7 @@ private:
 	int m_RotationInverted;
 	int m_RotationDisk;
 	int m_BackgroundColor;
+	int m_HoldDisk;
 
 	typedef enum _ID_Interface
 	{
@@ -147,7 +148,8 @@ private:
 		ID_RADIO_2,
 		ID_RADIO_3,
 		ID_SWITCH_1,
-		ID_SWITCH_2
+		ID_SWITCH_2,
+		ID_SWITCH_3
 	} ID_Interface;
 
 	#ifndef SAFE_RELEASE
