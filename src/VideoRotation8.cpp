@@ -278,7 +278,7 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 		pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
 	}
 
-	if (m_HoldDisk)
+	if (m_RotationDisk && m_HoldDisk)
 	{
 		double hold = 0;
 		hr = GetInfo("hold", &hold);
