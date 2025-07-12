@@ -51,6 +51,7 @@ HRESULT VDJ_API CVideoRotation8::OnLoad()
 	hr = DeclareParameterRadio(&m_RotationAxe, ID_RADIO_3, "Rotation Z", "ROTZ", 0.0f);
 	hr = DeclareParameterSwitch(&m_RotationInverted, ID_SWITCH_1, "Inverted", "INV", 0.0f);
 	hr = DeclareParameterSwitch(&m_RotationDisk, ID_SWITCH_2, "Scratch", "S", 0.0f);
+	hr = DeclareParameterSwitch(&m_HoldDisk, ID_SWITCH_3, "Scratch Hold", "SH", 0.0f);
 
 	
 	hr = OnParameter(ID_INIT);
@@ -64,7 +65,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "VideoRotation";
 	info->Description = "Rotation of the Video.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY | VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "3.2 (64-bit)";
+	info->Version = "3.3 (64-bit)";
 
 	return S_OK;
 }
@@ -275,6 +276,15 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 		pDeviceContext->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
 
 		pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
+	}
+
+	if (m_HoldDisk)
+	{
+		double hold = 0;
+		hr = GetInfo("hold", &hold);
+		if (hr != S_OK) hold = 0.0f;
+	
+		if (hold == 0.0f) return S_OK;
 	}
 	
 	hr = Update_VertexBufferDynamic_D3D11(pDeviceContext);
@@ -661,11 +671,12 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 {
 	DirectX::XMMATRIX RotationMatrix = DirectX::XMMatrixIdentity();
 	float fRadians_Angle = 0;
+	double x = 0;
+	HRESULT hr = S_FALSE;
 
 	if (m_RotationDisk)
 	{
-		double x = 0;
-		HRESULT hr = GetInfo("get_rotation", &x);
+		hr = GetInfo("get_rotation", &x);
 		if (hr != S_OK) x = 0.0f;	
 
 		m_Angle = float(x) * 360.0f;
