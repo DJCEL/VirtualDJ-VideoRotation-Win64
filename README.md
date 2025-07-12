@@ -8,13 +8,11 @@ It uses a [Vertex Shader](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64
 
 The compiled shader files (.cso) in [src/Shaders](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/tree/main/src/Shaders) are then included in [Plugin.rc](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Plugin.rc) with the ResourceNames VERTEXSHADER8_CSO and PIXELSHADER8_CSO
 
-We use a Constant Buffer in the Vertex Shader 
+For the Vertex Buffer, we use 4 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP but we could have also used 6 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 
-We define:
+We use a Constant Buffer in the Vertex Shader. We define:
 - WVPMatrix = WorldMatrix * ViewMatrix * ProjectionMatrix
   
 with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2
 
 (Both TranslationMatrix are used to center the rotation in the middle of the texture)
-
-For the Vertex Buffer, we use 4 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP but we could have also used 6 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
