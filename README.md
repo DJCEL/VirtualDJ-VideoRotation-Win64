@@ -6,4 +6,4 @@ You need to download [DirectXMath](https://github.com/Microsoft/DirectXMath) (at
 
 It uses a [Vertex Shader](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Shaders/VertexShader.hlsl) & a [Pixel Shader](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Shaders/PixelShader.hlsl) (with Shader Model 5.0)
 
-The compiled shader files (.cso) in [src/Shaders](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/tree/main/src/Shaders) are then included in [Plugin.rc](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Plugin.rc) with the ResourceName VERTEXSHADER8_CSO and PIXELSHADER8_CSO
+The compiled shader files (.cso) in [src/Shaders](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/tree/main/src/Shaders) are then included in [Plugin.rc](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Plugin.rc) with the ResourceNames 'VERTEXSHADER8_CSO' and 'PIXELSHADER8_CSO'
