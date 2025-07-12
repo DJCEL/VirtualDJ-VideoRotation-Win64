@@ -16,3 +16,5 @@ We define:
 with WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2
 
 (Both TranslationMatrix are used to center the rotation in the middle of the texture)
+
+For the Vertex Buffer, we use 4 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP but we could have also used 6 vertices with D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
