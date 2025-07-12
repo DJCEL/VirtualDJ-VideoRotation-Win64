@@ -14,7 +14,7 @@ CVideoRotation8::CVideoRotation8()
 	pConstantBuffer = nullptr;
 	pInputLayout = nullptr;
 	pRasterizerState = nullptr;
-	ZeroMemory(pNewVertices, 4 * sizeof(TVertex8));
+	ZeroMemory(pNewVertices, 4 * sizeof(TLVERTEX));
 	ZeroMemory(&m_ConstantBufferData, sizeof(VS_CONSTANTBUFFER));
 	ZeroMemory(&m_SliderValue, 4 * sizeof(float));
 	m_Direct3D_On = false;
