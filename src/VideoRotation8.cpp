@@ -229,8 +229,6 @@ HRESULT VDJ_API CVideoRotation8::OnAudioSamples(float* buffer, int nb)
 //-----------------------------------------------------------------------
 void CVideoRotation8::OnResizeVideo()
 {
-	HRESULT hr = S_FALSE;
-
 	m_Width = width;
 	m_Height = height;
 }
