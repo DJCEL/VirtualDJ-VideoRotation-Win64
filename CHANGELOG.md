@@ -8,7 +8,7 @@
 ## 3.2 (2025.07-12)
 
 **Fixed bugs:**
-- camera PosZ fixed to be negative and textures coordinatates adapted
+- cam_posZ fixed in SetViewMatrix_D3D11() to be negative instea of positive. Texture coordinates adapted for pNewVertices.
 
 ## 3.0 (2025.07-12)
 - first release in Win64bit
