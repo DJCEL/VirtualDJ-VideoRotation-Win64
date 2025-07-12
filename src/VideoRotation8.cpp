@@ -515,10 +515,10 @@ HRESULT CVideoRotation8::Update_NewVertices_D3D11()
 	
 	if (inverted_texture)
 	{
-		pNewVertices[0] = { P1, color_vertex, T4 };
-		pNewVertices[1] = { P2, color_vertex, T3 };
-		pNewVertices[2] = { P3, color_vertex, T2 };
-		pNewVertices[3] = { P4, color_vertex, T1 };
+		pNewVertices[0] = { P1, color_vertex, T3 };
+		pNewVertices[1] = { P2, color_vertex, T4 };
+		pNewVertices[2] = { P3, color_vertex, T1 };
+		pNewVertices[3] = { P4, color_vertex, T2 };
 	}
 	else
 	{
