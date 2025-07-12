@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <FxCompile Include="..\src\Shaders\PixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\VideoRotation8.cpp">
+      <Filter>SDK8\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VdjPlugin8.h">
+      <Filter>SDK8\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VdjVideo8.h">
+      <Filter>SDK8\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VideoRotation8.h">
+      <Filter>SDK8\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="..\src\Shaders\VertexShader.cso">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\PixelShader.cso">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{99f8cde1-a446-4b7d-9d2b-39c63a7cdf89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK8">
+      <UniqueIdentifier>{01a95326-ab6d-4e3c-91f2-d53636b20b93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{84ba0bac-b41f-4688-ab7f-ef42d88f4376}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK8\Header Files">
+      <UniqueIdentifier>{a5730a69-64eb-4042-bd2c-84098745650c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK8\Source Files">
+      <UniqueIdentifier>{535d4109-cc7e-48d1-b8f1-9f16e7f80f89}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\Plugin.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
