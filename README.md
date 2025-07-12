@@ -1,4 +1,4 @@
-![logo](https://github.com/djcel/VideoRotation/blob/main/VideoRotation.JPG?raw=true "")
+![logo](https://github.com/djcel/VirtualDJ-VideoRotation-Win64/blob/main/VideoRotation.JPG?raw=true "")
 # VideoRotation
 A VirtualDJ Video Effect for Windows 64-bit
 
