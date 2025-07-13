@@ -2,6 +2,9 @@
 # VideoRotation
 A VirtualDJ Video Effect for Windows 64-bit
 
+DLL compilation (64bit):
+- Output filepath: C:\Users\\{your_username}\AppData\Local\VirtualDJ\Plugins64\VideoEffect\VideoRotation.dll
+
 You need to download [DirectXMath](https://github.com/Microsoft/DirectXMath) (at least version 2025.4.3.1) in Visual Studio 2022 with NuGet 
 
 It uses a [Vertex Shader](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Shaders/VertexShader.hlsl) and a [Pixel Shader](https://github.com/DJCEL/VirtualDJ-VideoRotation-Win64/blob/main/src/Shaders/PixelShader.hlsl) (with Shader Model 5.0)
