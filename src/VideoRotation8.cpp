@@ -294,8 +294,6 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, (FLOAT) m_Width, (FLOAT) m_Height, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH };
 	pDeviceContext->RSSetViewports(1, &viewport);
 
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
 	if (pInputLayout)
 	{
 		pDeviceContext->IASetInputLayout(pInputLayout);
@@ -328,6 +326,7 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	if (pVertexBuffer)
 	{
+		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 		pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
 
