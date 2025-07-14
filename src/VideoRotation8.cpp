@@ -151,7 +151,7 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceInit()
 	m_Height = height;
 
 	// GetDevice() doesn't AddRef(), so we don't need to release pD3DDevice later
-	hr = GetDevice(VDJVIDEOENGINE, (void**)  &pD3DDevice);
+	hr = GetDevice(VdjVideoEngineDirectX11, (void**)  &pD3DDevice);
 	if(hr!=S_OK || pD3DDevice==nullptr) return S_FALSE;
 
 	hr = Initialize_D3D11(pD3DDevice);
@@ -192,7 +192,7 @@ HRESULT VDJ_API CVideoRotation8::OnStop()
 HRESULT VDJ_API CVideoRotation8::OnDraw()
 {
 	HRESULT hr = S_FALSE;
-	VDJVIDEOTEXTURE *pTexture = nullptr;
+	ID3D11ShaderResourceView *pTextureView = nullptr;
 	TVertex8* vertices = nullptr;
 
 	if (width != m_Width || height != m_Height)
@@ -206,8 +206,8 @@ HRESULT VDJ_API CVideoRotation8::OnDraw()
 		if (hr != S_OK) return S_FALSE;
 	}
 	
-	// We get current texture and vertices from VirtualDJ
-	hr = GetTexture(VDJVIDEOENGINE, (void**) &pTexture, &vertices);
+	// GetTexture() doesn't AddRef, so doesn't need to be released
+	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
 	if (hr != S_OK) return S_FALSE;
 
 	if (!pD3DDevice) return S_FALSE;
@@ -218,7 +218,7 @@ HRESULT VDJ_API CVideoRotation8::OnDraw()
 	pD3DDeviceContext->OMGetRenderTargets(1, &pD3DRenderTargetView, nullptr);
 	if (!pD3DRenderTargetView) return S_FALSE;
 
-	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTexture, vertices);
+	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTextureView, vertices);
 	if (hr != S_OK) return S_FALSE;
 
 	return S_OK;
