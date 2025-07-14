@@ -5,8 +5,8 @@ CVideoRotation8::CVideoRotation8()
 {
 	pD3DDevice = nullptr;
 	pD3DDeviceContext = nullptr;
-	pVertexBuffer = nullptr;
 	pD3DRenderTargetView = nullptr;
+	pVertexBuffer = nullptr;
 	pVertexShader = nullptr;
 	pPixelShader = nullptr;
 	pVertexShaderBlob = nullptr;
