@@ -105,7 +105,6 @@ private:
 
 	ID3D11Device* pD3DDevice;
 	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
-	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
 	CComPtr<ID3D11RenderTargetView> pD3DRenderTargetView;
 	CComPtr<ID3D11Buffer> pVertexBuffer;
 	CComPtr<ID3D11Buffer> pConstantBuffer;
