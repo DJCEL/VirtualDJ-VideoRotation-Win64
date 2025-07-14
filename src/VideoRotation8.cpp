@@ -171,6 +171,7 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 	SAFE_RELEASE(pConstantBuffer);
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE_CCOMPTR(pD3DDeviceContext);
+	pD3DDevice = nullptr; //can no longer be used when device closed
 	m_Direct3D_On = false;
 	
 	return S_OK;
