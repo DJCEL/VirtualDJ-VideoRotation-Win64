@@ -170,7 +170,7 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 	SAFE_RELEASE(pRasterizerState);
 	SAFE_RELEASE(pConstantBuffer);
 	SAFE_RELEASE(pD3DRenderTargetView);
-	SAFE_RELEASE(pD3DDeviceContext);
+	SAFE_RELEASE_CCOMPTR(pD3DDeviceContext);
 	m_Direct3D_On = false;
 	
 	return S_OK;
