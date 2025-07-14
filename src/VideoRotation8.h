@@ -105,15 +105,16 @@ private:
 
 	ID3D11Device* pD3DDevice;
 	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
-	ID3D11RenderTargetView* pD3DRenderTargetView;
-	ID3D11Buffer* pVertexBuffer;
-	ID3D11Buffer* pConstantBuffer;
-	ID3D11InputLayout* pInputLayout;
-	ID3D11VertexShader* pVertexShader;
-	ID3D11PixelShader* pPixelShader;
-	ID3DBlob* pVertexShaderBlob;
-	ID3DBlob* pPixelShaderBlob;
-	ID3D11RasterizerState* pRasterizerState;
+	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
+	CComPtr<ID3D11RenderTargetView> pD3DRenderTargetView;
+	CComPtr<ID3D11Buffer> pVertexBuffer;
+	CComPtr<ID3D11Buffer> pConstantBuffer;
+	CComPtr<ID3D11InputLayout> pInputLayout;
+	CComPtr<ID3D11VertexShader> pVertexShader;
+	CComPtr<ID3D11PixelShader> pPixelShader;
+	CComPtr<ID3DBlob> pVertexShaderBlob;
+	CComPtr<ID3DBlob> pPixelShaderBlob;
+	CComPtr<ID3D11RasterizerState> pRasterizerState;
 
 	VS_CONSTANTBUFFER m_ConstantBufferData;
 
