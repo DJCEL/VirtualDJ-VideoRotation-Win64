@@ -35,9 +35,6 @@ public:
 	HRESULT VDJ_API OnAudioSamples(float* buffer, int nb);
 
 private:
-	static const EVdjVideoEngine VDJVIDEOENGINE = VdjVideoEngineDirectX11;
-	typedef ID3D11Device VDJVIDEODEVICE;
-	typedef ID3D11ShaderResourceView VDJVIDEOTEXTURE;
 	struct D3DXPOSITION
 	{
 		float x;
