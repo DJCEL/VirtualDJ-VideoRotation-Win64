@@ -161,13 +161,13 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceInit()
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 {
-	SAFE_RELEASE_CCOMPTR(pVertexBuffer);
-	SAFE_RELEASE_CCOMPTR(pVertexShader);
-	SAFE_RELEASE_CCOMPTR(pPixelShader);
+	SAFE_RELEASE(pVertexBuffer);
+	SAFE_RELEASE(pVertexShader);
+	SAFE_RELEASE(pPixelShader);
 	SAFE_RELEASE(pVertexShaderBlob);
-	SAFE_RELEASE_CCOMPTR(pInputLayout);
-	SAFE_RELEASE_CCOMPTR(pRasterizerState);
-	SAFE_RELEASE_CCOMPTR(pConstantBuffer);
+	SAFE_RELEASE(pInputLayout);
+	SAFE_RELEASE(pRasterizerState);
+	SAFE_RELEASE(pConstantBuffer);
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE(pD3DDeviceContext);
 	pD3DDevice = nullptr; //can no longer be used when device closed
@@ -398,7 +398,7 @@ HRESULT CVideoRotation8::Create_VertexShader_D3D11(ID3D11Device* pDevice)
 	const WCHAR* resourceType = RT_RCDATA;
 	const WCHAR* resourceName = L"VERTEXSHADER8_CSO";
 
-	SAFE_RELEASE_CCOMPTR(pVertexShader);
+	SAFE_RELEASE(pVertexShader);
 
 	hr = Create_VertexShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
 	if (hr != S_OK || !pVertexShader) return S_FALSE;
@@ -414,7 +414,7 @@ HRESULT CVideoRotation8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	const WCHAR* resourceType = RT_RCDATA;
 	const WCHAR* resourceName = L"PIXELSHADER8_CSO";
 
-	SAFE_RELEASE_CCOMPTR(pPixelShader);
+	SAFE_RELEASE(pPixelShader);
 
 	hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
 	if (hr != S_OK || !pPixelShader) return S_FALSE;
