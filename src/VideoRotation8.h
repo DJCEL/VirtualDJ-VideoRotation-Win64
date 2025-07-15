@@ -112,7 +112,7 @@ private:
 	CComPtr<ID3D11InputLayout> pInputLayout;
 	CComPtr<ID3D11VertexShader> pVertexShader;
 	CComPtr<ID3D11PixelShader> pPixelShader;
-	CComPtr<ID3DBlob> pVertexShaderBlob;
+	ID3DBlob* pVertexShaderBlob;
 	CComPtr<ID3D11RasterizerState> pRasterizerState;
 
 	VS_CONSTANTBUFFER m_ConstantBufferData;
