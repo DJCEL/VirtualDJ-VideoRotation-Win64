@@ -264,6 +264,8 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 	HRESULT hr = S_FALSE;
 
+	//hr = GetInfoFromShaderResourceView(pTextureView);
+
 	if (m_BackgroundColor >= 1)
 	{
 		D3DXCOLOR Color;
@@ -728,4 +730,40 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 	DirectX::XMMATRIX WorldMatrix = TranslationMatrix1 * RotationMatrix * TranslationMatrix2;
 
 	return WorldMatrix;
+}
+//-----------------------------------------------------------------------
+HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView)
+{
+	HRESULT hr = S_FALSE;
+
+	ID3D11Resource* pResource = nullptr;
+	ID3D11Texture2D* pTexture = nullptr;
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+
+	pShaderResourceView->GetDesc(&viewDesc);
+
+	DXGI_FORMAT dxFormat1 = viewDesc.Format;
+	D3D11_SRV_DIMENSION ViewDimension = viewDesc.ViewDimension;
+
+	pShaderResourceView->GetResource(&pResource);
+	if (!pResource) return S_FALSE;
+
+	hr = pResource->QueryInterface(__uuidof(ID3D11Texture2D), (void**)&pTexture);
+	if (hr != S_OK || !pTexture) return S_FALSE;
+
+	D3D11_TEXTURE2D_DESC textureDesc;
+	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	pTexture->GetDesc(&textureDesc);
+
+	DXGI_FORMAT dxFormat2 = textureDesc.Format;
+	UINT TextureWidth = textureDesc.Width;
+	UINT TextureHeight = textureDesc.Height;
+
+	SAFE_RELEASE(pTexture);
+	SAFE_RELEASE(pResource);
+
+	return S_OK;
 }
