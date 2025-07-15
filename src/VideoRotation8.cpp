@@ -164,7 +164,7 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 	SAFE_RELEASE_CCOMPTR(pVertexBuffer);
 	SAFE_RELEASE_CCOMPTR(pVertexShader);
 	SAFE_RELEASE_CCOMPTR(pPixelShader);
-	SAFE_RELEASE_CCOMPTR(pVertexShaderBlob);
+	SAFE_RELEASE(pVertexShaderBlob);
 	SAFE_RELEASE_CCOMPTR(pInputLayout);
 	SAFE_RELEASE_CCOMPTR(pRasterizerState);
 	SAFE_RELEASE_CCOMPTR(pConstantBuffer);
@@ -443,7 +443,7 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	hr = pDevice->CreateInputLayout(InputElmentDesc, numElements, VertexShaderByteCode, VertexShaderByteCodeLength, &pInputLayout);
 	if (hr != S_OK || !pInputLayout) return S_FALSE;
 
-	SAFE_RELEASE_CCOMPTR(pVertexShaderBlob);
+	SAFE_RELEASE(pVertexShaderBlob);
 
 	return hr;
 }
