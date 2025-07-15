@@ -443,6 +443,8 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	hr = pDevice->CreateInputLayout(InputElmentDesc, numElements, VertexShaderByteCode, VertexShaderByteCodeLength, &pInputLayout);
 	if (hr != S_OK || !pInputLayout) return S_FALSE;
 
+	SAFE_RELEASE_CCOMPTR(pVertexShaderBlob);
+
 	return hr;
 }
 //-----------------------------------------------------------------------
