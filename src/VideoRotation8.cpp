@@ -165,7 +165,6 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 	SAFE_RELEASE_CCOMPTR(pVertexShader);
 	SAFE_RELEASE_CCOMPTR(pPixelShader);
 	SAFE_RELEASE_CCOMPTR(pVertexShaderBlob);
-	SAFE_RELEASE_CCOMPTR(pPixelShaderBlob);
 	SAFE_RELEASE_CCOMPTR(pInputLayout);
 	SAFE_RELEASE_CCOMPTR(pRasterizerState);
 	SAFE_RELEASE_CCOMPTR(pConstantBuffer);
