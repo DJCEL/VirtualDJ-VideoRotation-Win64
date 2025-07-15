@@ -105,8 +105,8 @@ private:
 	DirectX::XMMATRIX SetWorldMatrix_D3D11();
 
 	ID3D11Device* pD3DDevice;
-	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
-	CComPtr<ID3D11RenderTargetView> pD3DRenderTargetView;
+	ID3D11DeviceContext* pD3DDeviceContext;
+	ID3D11RenderTargetView* pD3DRenderTargetView;
 	CComPtr<ID3D11Buffer> pVertexBuffer;
 	CComPtr<ID3D11Buffer> pConstantBuffer;
 	CComPtr<ID3D11InputLayout> pInputLayout;
