@@ -8,7 +8,7 @@
 #include <directxmath.h>
 #include <string_view>
 #include <stdio.h>
-#include <atlbase.h> //we use atl for the CComPtr smart pointer, but this is optional
+#include <atlbase.h> //we use atl for the CComPtr<> smart pointer, but this is optional
 
 #pragma comment(lib, "d3d11.lib")   // Direct3D11 library
 #pragma comment(lib, "d3dcompiler.lib") // Direct3D shader compiler
@@ -113,7 +113,6 @@ private:
 	CComPtr<ID3D11VertexShader> pVertexShader;
 	CComPtr<ID3D11PixelShader> pPixelShader;
 	CComPtr<ID3DBlob> pVertexShaderBlob;
-	CComPtr<ID3DBlob> pPixelShaderBlob;
 	CComPtr<ID3D11RasterizerState> pRasterizerState;
 
 	VS_CONSTANTBUFFER m_ConstantBufferData;
