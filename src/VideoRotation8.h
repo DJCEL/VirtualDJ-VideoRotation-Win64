@@ -98,6 +98,7 @@ private:
 	HRESULT Update_ConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
 	HRESULT Update_NewVertices_D3D11();
 	HRESULT Update_ConstantBufferData_D3D11();
+	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView);
 
 	DirectX::XMMATRIX SetViewMatrix_D3D11();
 	DirectX::XMMATRIX SetProjectionMatrix_D3D11();
