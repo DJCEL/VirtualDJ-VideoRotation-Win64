@@ -10,7 +10,6 @@ CVideoRotation8::CVideoRotation8()
 	pVertexShader = nullptr;
 	pPixelShader = nullptr;
 	pVertexShaderBlob = nullptr;
-	pPixelShaderBlob = nullptr;
 	pConstantBuffer = nullptr;
 	pInputLayout = nullptr;
 	pRasterizerState = nullptr;
@@ -580,6 +579,7 @@ HRESULT CVideoRotation8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Devic
 {
 	HRESULT hr = S_FALSE;
 	if (!pDevice) return S_FALSE;
+	ID3DBlob* pPixelShaderBlob = nullptr;
 
 	hr = D3DXReadResourceToBlob(resourceType, resourceName, &pPixelShaderBlob);
 	if (hr != S_OK || !pPixelShaderBlob) return S_FALSE;
@@ -589,6 +589,8 @@ HRESULT CVideoRotation8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Devic
 
 	hr = pDevice->CreatePixelShader(PixelShaderBytecode, PixelShaderBytecodeLength, nullptr, &pPixelShader);
 
+	SAFE_RELEASE(pPixelShaderBlob);
+	
 	return hr;
 }
 //-----------------------------------------------------------------------
