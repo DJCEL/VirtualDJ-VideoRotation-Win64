@@ -6,7 +6,7 @@
 #include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <directxmath.h>
-#include <string_view>  // ISO C++20 Standard (/std:c++20)
+#include <string_view>  // ISO C++17 Standard (/std:c++17)
 #include <stdio.h>
 #include <atlbase.h> //we use atl for the CComPtr<ID3D11xxxxxx> smart pointer, but this is optional
 
