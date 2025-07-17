@@ -477,12 +477,12 @@ HRESULT CVideoRotation8::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* c
 	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
 	ZeroMemory(&MappedSubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	hr = ctx->Map(pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
+	hr = ctx->Map(pVertexBuffer,0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
 	if (hr != S_OK) return S_FALSE;
 
 	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
 
-	ctx->Unmap(pVertexBuffer, NULL);
+	ctx->Unmap(pVertexBuffer, 0);
 
 	return S_OK;
 }
