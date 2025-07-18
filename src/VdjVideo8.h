@@ -155,12 +155,14 @@ public:
 
 	//For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
 	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
+        //For Metal (macOS) device is MTLRenderCommandEncoder
 	HRESULT GetDevice(EVdjVideoEngine engine, void **device) {return vcb->GetDevice(engine,device);}
 
 	//For DirectX 9 (windows 32-bit) texture is IDirect3DTexture9*
 	//For DirectX 11 (windows 64-bit) texture is ID3D11ShaderResourceView*
 	//For OpenGL (macOS) texture is a regular opengl texture id, with type GLuint
-	HRESULT GetTexture(EVdjVideoEngine engine, void **texture, TVertex8 **vertices) {return vcb->GetTexture(engine,texture,vertices);}
+	//For Metal (macOS) texture is MTLTexture
+        HRESULT GetTexture(EVdjVideoEngine engine, void **texture, TVertex8 **vertices) {return vcb->GetTexture(engine,texture,vertices);}
 
 	HRESULT DrawDeck() {return vcb->DrawDeck();}
 
