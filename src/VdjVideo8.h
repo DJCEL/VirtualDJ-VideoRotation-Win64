@@ -64,12 +64,14 @@ struct IVdjVideoCallbacks8
 
 	//For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
 	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
+        //For Metal (macOS) device is id<MTLRenderCommandEncoder>
 	virtual HRESULT GetDevice(EVdjVideoEngine engine, void **device)=0;
 
 	//For DirectX 9 (windows 32-bit) texture is IDirect3DTexture9*
 	//For DirectX 11 (windows 64-bit) texture is ID3D11ShaderResourceView*
 	//For OpenGL (macOS) texture is a regular opengl texture id, with type GLuint
-	virtual HRESULT GetTexture(EVdjVideoEngine engine, void **texture, TVertex8 **vertices)=0;
+	//For Metal (macOS) texture is id<MTLTexture>
+        virtual HRESULT GetTexture(EVdjVideoEngine engine, void **texture, TVertex8 **vertices)=0;
 };
 
 
