@@ -90,11 +90,19 @@ public:
 	HRESULT (*DrawDeck)(int deck, TVertex8* vertices);
 
 	// for more complicated operations, you can ask direct access to the device and textures
-	// For OpenGL texture needs to point to a GLuint, for DirectX 9, it needs to point to a IDirect3DTexture9*
+	
+        //For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
+	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
+        //For Metal (macOS) device is id<MTLRenderCommandEncoder>
 	HRESULT (*GetDevice)(EVdjVideoEngine engine, void **device);
-	HRESULT (*GetTexture)(EVdjVideoEngine engine, int deck, void**texture);
+	
+        //For DirectX 9 (windows 32-bit) texture is IDirect3DTexture9*
+	//For DirectX 11 (windows 64-bit) texture is ID3D11ShaderResourceView*
+	//For OpenGL (macOS) texture is a regular opengl texture id, with type GLuint
+	//For Metal (macOS) texture is id<MTLTexture>
+        HRESULT (*GetTexture)(EVdjVideoEngine engine, int deck, void**texture);
 
-	// When DirectX/OpenGL is initialized or closed, these functions will be called
+	// When DirectX/OpenGL/Metal is initialized or closed, these functions will be called
 	virtual HRESULT VDJ_API OnDeviceInit() {return S_OK;}
 	virtual HRESULT VDJ_API OnDeviceClose() {return S_OK;}
 
@@ -122,10 +130,19 @@ public:
 	HRESULT (*DrawDeck)(int deck, TVertex8* vertices);
 	
 	// for more complicated operations, you can ask direct access to the device and textures
-	HRESULT (*GetDevice)(EVdjVideoEngine engine, void **device);
-	HRESULT (*GetTexture)(EVdjVideoEngine engine, int deck, void**texture);
+	
+        //For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
+	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
+        //For Metal (macOS) device is id<MTLRenderCommandEncoder>
+        HRESULT (*GetDevice)(EVdjVideoEngine engine, void **device);
 
-	// When DirectX/OpenGL is initialized or closed, these functions will be called
+	//For DirectX 9 (windows 32-bit) texture is IDirect3DTexture9*
+	//For DirectX 11 (windows 64-bit) texture is ID3D11ShaderResourceView*
+	//For OpenGL (macOS) texture is a regular opengl texture id, with type GLuint
+	//For Metal (macOS) texture is id<MTLTexture>
+        HRESULT (*GetTexture)(EVdjVideoEngine engine, int deck, void**texture);
+
+	// When DirectX/OpenGL/Metal is initialized or closed, these functions will be called
 	virtual HRESULT VDJ_API OnDeviceInit() {return S_OK;}
 	virtual HRESULT VDJ_API OnDeviceClose() {return S_OK;}
 
@@ -155,6 +172,8 @@ public:
 	// or call GetTexture to get low-level access to the texture and its vertices.
 	virtual HRESULT VDJ_API OnDraw()=0;
 
+        // for more complicated operations, you can ask direct access to the device and textures
+	
 	//For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
 	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
         //For Metal (macOS) device is id<MTLRenderCommandEncoder>
