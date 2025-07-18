@@ -148,25 +148,25 @@ public:
 	virtual HRESULT VDJ_API OnStop() {return S_OK;}
 
 	// OnDraw() is called every frame while your plugin is activated.
-	// You can get access to the DirectX/OpenGL device by calling GetDevice, and do any operation you want
+	// You can get access to the DirectX/OpenGL/Metal device by calling GetDevice, and do any operation you want
 	// In order to draw the original image, you can either just call DrawDeck() if you don't need to modify the image (for overlay plugins for examples),
 	// or call GetTexture to get low-level access to the texture and its vertices.
 	virtual HRESULT VDJ_API OnDraw()=0;
 
 	//For DirectX 9 (windows 32-bit) device is IDirect3DDevice9*
 	//For DirectX 11 (windows 64-bit) device is ID3D11Device*
-        //For Metal (macOS) device is MTLRenderCommandEncoder
+        //For Metal (macOS) device is id<MTLRenderCommandEncoder>
 	HRESULT GetDevice(EVdjVideoEngine engine, void **device) {return vcb->GetDevice(engine,device);}
 
 	//For DirectX 9 (windows 32-bit) texture is IDirect3DTexture9*
 	//For DirectX 11 (windows 64-bit) texture is ID3D11ShaderResourceView*
 	//For OpenGL (macOS) texture is a regular opengl texture id, with type GLuint
-	//For Metal (macOS) texture is MTLTexture
+	//For Metal (macOS) texture is id<MTLTexture>
         HRESULT GetTexture(EVdjVideoEngine engine, void **texture, TVertex8 **vertices) {return vcb->GetTexture(engine,texture,vertices);}
 
 	HRESULT DrawDeck() {return vcb->DrawDeck();}
 
-	// When DirectX/OpenGL is initialized or closed, these functions will be called
+	// When DirectX/OpenGL/Metal is initialized or closed, these functions will be called
 	virtual HRESULT VDJ_API OnDeviceInit() {return S_OK;}
 	virtual HRESULT VDJ_API OnDeviceClose() {return S_OK;}
 
