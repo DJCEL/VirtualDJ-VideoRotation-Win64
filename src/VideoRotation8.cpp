@@ -5,11 +5,10 @@ CVideoRotation8::CVideoRotation8()
 {
 	pD3DDevice = nullptr;
 	pD3DDeviceContext = nullptr;
-	pD3DRenderTargetView = nullptr;
 	pVertexBuffer = nullptr;
+	pD3DRenderTargetView = nullptr;
 	pVertexShader = nullptr;
 	pPixelShader = nullptr;
-	pVertexShaderBlob = nullptr;
 	pConstantBuffer = nullptr;
 	pInputLayout = nullptr;
 	pRasterizerState = nullptr;
@@ -17,6 +16,8 @@ CVideoRotation8::CVideoRotation8()
 	ZeroMemory(&m_ConstantBufferData, sizeof(VS_CONSTANTBUFFER));
 	ZeroMemory(&m_SliderValue, 4 * sizeof(float));
 	m_Direct3D_On = false;
+	m_WidthOnDeviceInit = 0;
+	m_HeightOnDeviceInit = 0;
 	m_Width = 0;
 	m_Height = 0;
 	m_VertexCount = 0;
@@ -30,6 +31,7 @@ CVideoRotation8::CVideoRotation8()
 	m_RotationDisk = 0;
 	m_BackgroundColor = 0;
 	m_Angle = 0;
+	m_HoldDisk = 0;
 }
 //------------------------------------------------------------------------------------------
 CVideoRotation8::~CVideoRotation8()
@@ -64,7 +66,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "VideoRotation";
 	info->Description = "Rotation of the Video.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY | VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "3.3 (64-bit)";
+	info->Version = "3.4 (64-bit)";
 
 	return S_OK;
 }
@@ -146,6 +148,8 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceInit()
 	HRESULT hr = S_FALSE;
 
 	m_Direct3D_On = true;
+	m_WidthOnDeviceInit = width;
+	m_HeightOnDeviceInit = height;
 	m_Width = width;
 	m_Height = height;
 
@@ -161,18 +165,12 @@ HRESULT VDJ_API CVideoRotation8::OnDeviceInit()
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CVideoRotation8::OnDeviceClose()
 {
-	SAFE_RELEASE(pVertexBuffer);
-	SAFE_RELEASE(pVertexShader);
-	SAFE_RELEASE(pPixelShader);
-	SAFE_RELEASE(pVertexShaderBlob);
-	SAFE_RELEASE(pInputLayout);
-	SAFE_RELEASE(pRasterizerState);
-	SAFE_RELEASE(pConstantBuffer);
+	Release_D3D11();
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE(pD3DDeviceContext);
-	pD3DDevice = nullptr; //can no longer be used when device closed
+	pD3DDevice = nullptr;
 	m_Direct3D_On = false;
-	
+
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
@@ -229,6 +227,8 @@ HRESULT VDJ_API CVideoRotation8::OnAudioSamples(float* buffer, int nb)
 //-----------------------------------------------------------------------
 void CVideoRotation8::OnResizeVideo()
 {
+	HRESULT hr = S_FALSE;
+
 	m_Width = width;
 	m_Height = height;
 }
@@ -257,13 +257,23 @@ HRESULT CVideoRotation8::Initialize_D3D11(ID3D11Device* pDevice)
 
 	return S_OK;
 }
+//-----------------------------------------------------------------------
+void CVideoRotation8::Release_D3D11()
+{
+	SAFE_RELEASE(pVertexShader);
+	SAFE_RELEASE(pPixelShader);
+	SAFE_RELEASE(pInputLayout);
+	SAFE_RELEASE(pVertexBuffer);
+	SAFE_RELEASE(pConstantBuffer);
+	SAFE_RELEASE(pRasterizerState);
+}
 // -----------------------------------------------------------------------
 HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
 
-	//hr = GetInfoFromRenderTargetView(pRenderTargetView);
-	//hr = GetInfoFromShaderResourceView(pTextureView);
+	hr = GetInfoFromRenderTargetView(pRenderTargetView);
+	hr = GetInfoFromShaderResourceView(pTextureView);
 
 	if (m_BackgroundColor >= 1)
 	{
@@ -279,14 +289,16 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 		pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
 	}
 
+
 	if (m_RotationDisk && m_HoldDisk)
 	{
 		double hold = 0;
 		hr = GetInfo("hold", &hold);
 		if (hr != S_OK) hold = 0.0f;
-	
+
 		if (hold == 0.0f) return S_OK;
 	}
+
 	
 	hr = Update_VertexBufferDynamic_D3D11(pDeviceContext);
 	if (hr != S_OK) return S_FALSE;
@@ -296,6 +308,8 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	D3D11_VIEWPORT viewport = { 0.0f, 0.0f, (FLOAT) m_Width, (FLOAT) m_Height, D3D11_MIN_DEPTH, D3D11_MAX_DEPTH };
 	pDeviceContext->RSSetViewports(1, &viewport);
+
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	if (pInputLayout)
 	{
@@ -329,7 +343,6 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	if (pVertexBuffer)
 	{
-		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 		pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
 
@@ -428,7 +441,15 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	HRESULT hr = S_FALSE;
 
 	if (!pDevice) return E_FAIL;
-	if (!pVertexShaderBlob) return E_FAIL;
+
+	const WCHAR* resourceType = RT_RCDATA;
+	const WCHAR* resourceName = L"VERTEXSHADER8_CSO";
+
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
+
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
 
 	const D3D11_INPUT_ELEMENT_DESC InputElmentDesc[3] =
 	{
@@ -438,13 +459,9 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	};
 
 	UINT numElements = ARRAYSIZE(InputElmentDesc);
-	SIZE_T VertexShaderByteCodeLength = pVertexShaderBlob->GetBufferSize();
-	LPVOID VertexShaderByteCode = pVertexShaderBlob->GetBufferPointer();
 
-	hr = pDevice->CreateInputLayout(InputElmentDesc, numElements, VertexShaderByteCode, VertexShaderByteCodeLength, &pInputLayout);
+	hr = pDevice->CreateInputLayout(InputElmentDesc, numElements, pShaderBytecode, BytecodeLength, &pInputLayout);
 	if (hr != S_OK || !pInputLayout) return S_FALSE;
-
-	SAFE_RELEASE(pVertexShaderBlob);
 
 	return hr;
 }
@@ -477,12 +494,12 @@ HRESULT CVideoRotation8::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* c
 	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
 	ZeroMemory(&MappedSubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	hr = ctx->Map(pVertexBuffer,0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
+	hr = ctx->Map(pVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
 	if (hr != S_OK) return S_FALSE;
 
 	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
 
-	ctx->Unmap(pVertexBuffer, 0);
+	ctx->Unmap(pVertexBuffer, NULL);
 
 	return S_OK;
 }
@@ -566,13 +583,13 @@ HRESULT CVideoRotation8::Create_VertexShaderFromResourceCSOFile_D3D11(ID3D11Devi
 {
 	HRESULT hr = S_FALSE;
 
-	hr = D3DXReadResourceToBlob(resourceType, resourceName, &pVertexShaderBlob);
-	if (hr != S_OK || !pVertexShaderBlob) return S_FALSE;
-	
-	LPVOID VertexShaderBytecode = pVertexShaderBlob->GetBufferPointer();
-	SIZE_T VertexShaderBytecodeLength = pVertexShaderBlob->GetBufferSize();
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
 
-	hr = pDevice->CreateVertexShader(VertexShaderBytecode, VertexShaderBytecodeLength, nullptr, &pVertexShader);
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
+
+	hr = pDevice->CreateVertexShader(pShaderBytecode, BytecodeLength, nullptr, &pVertexShader);
 	
 	return hr;
 }
@@ -581,65 +598,42 @@ HRESULT CVideoRotation8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Devic
 {
 	HRESULT hr = S_FALSE;
 	if (!pDevice) return S_FALSE;
-	ID3DBlob* pPixelShaderBlob = nullptr;
 
-	hr = D3DXReadResourceToBlob(resourceType, resourceName, &pPixelShaderBlob);
-	if (hr != S_OK || !pPixelShaderBlob) return S_FALSE;
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
 
-	LPVOID PixelShaderBytecode = pPixelShaderBlob->GetBufferPointer();
-	SIZE_T PixelShaderBytecodeLength = pPixelShaderBlob->GetBufferSize();
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
 
-	hr = pDevice->CreatePixelShader(PixelShaderBytecode, PixelShaderBytecodeLength, nullptr, &pPixelShader);
+	hr = pDevice->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, &pPixelShader);
 
-	SAFE_RELEASE(pPixelShaderBlob);
-	
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CVideoRotation8::D3DXReadResourceToBlob(const WCHAR* resourceType, const WCHAR* resourceName, ID3DBlob** ppContents)
+HRESULT CVideoRotation8::ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data)
 {
 	HRESULT hr = S_FALSE;
 
-	std::string_view ShaderData = getResource(resourceType, resourceName);
-
-	const char* ShaderBytecode = ShaderData.data();
-	SIZE_T ShaderBytecodeLength = ShaderData.length();
-
-	hr = D3DCreateBlob(ShaderBytecodeLength, ppContents);
-	if (hr != S_OK || !*ppContents)
-	{
-		return hr;
-	}
-
-	memcpy((*ppContents)->GetBufferPointer(), ShaderBytecode, ShaderBytecodeLength);
-
-	return S_OK;
-}
-//-----------------------------------------------------------------------
-std::string_view CVideoRotation8::getResource(const WCHAR* resourceType, const WCHAR* resourceName)
-{
 	HRSRC rc = FindResource(hInstance, resourceName, resourceType);
-	if (!rc)
-		return std::string_view("");
+	if (!rc) return S_FALSE;
 
 	HGLOBAL rcData = LoadResource(hInstance, rc);
-	if (!rcData)
-		return std::string_view("");
+	if (!rcData) return S_FALSE;
 
-	DWORD size = SizeofResource(hInstance, rc);
+	*size = (SIZE_T)SizeofResource(hInstance, rc);
+	if (*size == 0) return S_FALSE;
 
-	char* data = (char*)LockResource(rcData);
-	if (!data)
-		return std::string_view("");
+	*data = LockResource(rcData);
+	if (*data == nullptr) return S_FALSE;
 
-	return std::string_view(data, size);
+	return S_OK;
 }
 //-----------------------------------------------------------------------
 DirectX::XMMATRIX CVideoRotation8::SetViewMatrix_D3D11()
 {
 	float cam_posX = (float) m_Width / 2.0f;
 	float cam_posY = (float) m_Height / 2.0f;
-	float cam_posZ = (float) (max(m_Width, m_Height) + 100.0f) * (-1.0f); // Z is negative because we are looking at the origin from above
+	float cam_posZ = (float)(max(m_Width, m_Height) + 100.0f) * (-1.0f);  // Z is negative because we are looking at the origin from above
 
 	float cam_tgtX = (float) m_Width / 2.0f;
 	float cam_tgtY = (float) m_Height / 2.0f;
@@ -682,9 +676,10 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 	if (m_RotationDisk)
 	{
 		hr = GetInfo("get_rotation", &x);
-		if (hr != S_OK) x = 0.0f;	
+		if (hr != S_OK) x = 0.0f;
 
 		m_Angle = float(x) * 360.0f;
+
 		if (m_RotationInverted)
 		{
 			m_Angle = (-1.0f) * float(x) * 360.0f;
@@ -742,36 +737,36 @@ HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView*
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
 	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-	
+
 	pShaderResourceView->GetDesc(&viewDesc);
-	
+
 	DXGI_FORMAT dxFormat1 = viewDesc.Format;
 	D3D11_SRV_DIMENSION ViewDimension = viewDesc.ViewDimension;
-	
+
 	ID3D11Resource* pResource = nullptr;
 	pShaderResourceView->GetResource(&pResource);
 	if (!pResource) return S_FALSE;
-	
-	if (ViewDimension == D3D_SRV_DIMENSION_TEXTURE2D)
+
+	if (ViewDimension == D3D11_SRV_DIMENSION_TEXTURE2D)
 	{
 		ID3D11Texture2D* pTexture = nullptr;
 		hr = pResource->QueryInterface(__uuidof(ID3D11Texture2D), (void**)&pTexture);
 		if (hr != S_OK || !pTexture) return S_FALSE;
-	
+
 		D3D11_TEXTURE2D_DESC textureDesc;
 		ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	
+
 		pTexture->GetDesc(&textureDesc);
-	
+
 		DXGI_FORMAT dxFormat2 = textureDesc.Format;
 		UINT TextureWidth = textureDesc.Width;
 		UINT TextureHeight = textureDesc.Height;
-	
+
 		SAFE_RELEASE(pTexture);
 	}
-	
+
 	SAFE_RELEASE(pResource);
-	
+
 	return S_OK;
 }
 //-----------------------------------------------------------------------

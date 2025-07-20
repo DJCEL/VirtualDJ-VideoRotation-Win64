@@ -4,14 +4,10 @@
 
 #include "vdjVideo8.h"
 #include <d3d11_1.h>
-#include <d3dcompiler.h>
 #include <directxmath.h>
-#include <string_view>  // ISO C++17 Standard (/std:c++17)
 #include <stdio.h>
-#include <atlbase.h> //we use atl for the CComPtr<ID3D11xxxxxx> smart pointer, but this is optional
 
 #pragma comment(lib, "d3d11.lib")   // Direct3D11 library
-#pragma comment(lib, "d3dcompiler.lib") // Direct3D shader compiler
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -81,10 +77,10 @@ private:
 
 	void OnResizeVideo();
 	void OnSlider(int id);
-	std::string_view getResource(const WCHAR* resourceType, const WCHAR* resourceName);
-	HRESULT D3DXReadResourceToBlob(const WCHAR* resourceType, const WCHAR* resourceName, ID3DBlob** ppContents);
+	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
+	void Release_D3D11();
 	HRESULT Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices);
 	HRESULT Create_InputLayout_D3D11(ID3D11Device* pDevice);
 	HRESULT Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice);
@@ -113,7 +109,6 @@ private:
 	ID3D11InputLayout* pInputLayout;
 	ID3D11VertexShader* pVertexShader;
 	ID3D11PixelShader* pPixelShader;
-	ID3DBlob* pVertexShaderBlob;
 	ID3D11RasterizerState* pRasterizerState;
 
 	VS_CONSTANTBUFFER m_ConstantBufferData;
@@ -123,6 +118,8 @@ private:
 	UINT m_VertexStride;
 	UINT m_VertexOffset;
 	bool m_Direct3D_On;
+	int m_WidthOnDeviceInit;
+	int m_HeightOnDeviceInit;
 	int m_Width;
 	int m_Height;
 	float m_SliderValue[4];
@@ -155,9 +152,6 @@ private:
 	#define SAFE_RELEASE(x) { if (x!=nullptr) { x->Release(); x=nullptr; } }
 	#endif
 
-	#ifndef SAFE_RELEASE_CCOMPTR
-	#define SAFE_RELEASE_CCOMPTR(x) { if (x!=nullptr) { x.Release(); x=nullptr; } }
-	#endif
 };
 
 #endif
