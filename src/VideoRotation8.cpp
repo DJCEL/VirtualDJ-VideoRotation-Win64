@@ -272,8 +272,8 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 	HRESULT hr = S_FALSE;
 
-	hr = GetInfoFromRenderTargetView(pRenderTargetView);
-	hr = GetInfoFromShaderResourceView(pTextureView);
+	//hr = GetInfoFromRenderTargetView(pRenderTargetView);
+	//hr = GetInfoFromShaderResourceView(pTextureView);
 
 	if (m_BackgroundColor >= 1)
 	{
