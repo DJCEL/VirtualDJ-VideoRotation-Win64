@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.4 (2025-07-20)
+
+**Fixed:**
+- Remove the dependency of the DLL to D3DCOMPILE_47.DLL
+  
 ## 3.3 (2025-07-12)
 
 **Added:**
