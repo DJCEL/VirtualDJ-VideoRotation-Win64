@@ -446,15 +446,6 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 
 	if (!pDevice) return E_FAIL;
 
-	const WCHAR* resourceType = RT_RCDATA;
-	const WCHAR* resourceName = L"VERTEXSHADER8_CSO";
-
-	void* pShaderBytecode = nullptr;
-	SIZE_T BytecodeLength = 0;
-
-	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
-	if (hr != S_OK) return S_FALSE;
-
 	const D3D11_INPUT_ELEMENT_DESC InputElmentDesc[3] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,	 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -463,6 +454,14 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	};
 
 	UINT numElements = ARRAYSIZE(InputElmentDesc);
+	const WCHAR* resourceType = RT_RCDATA;
+	const WCHAR* resourceName = L"VERTEXSHADER8_CSO";
+
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
+
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
 
 	hr = pDevice->CreateInputLayout(InputElmentDesc, numElements, pShaderBytecode, BytecodeLength, &pInputLayout);
 	if (hr != S_OK || !pInputLayout) return S_FALSE;
