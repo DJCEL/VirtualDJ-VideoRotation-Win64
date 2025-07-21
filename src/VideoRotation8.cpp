@@ -208,12 +208,6 @@ HRESULT VDJ_API CVideoRotation8::OnDraw()
 		OnResizeVideo();
 	}
 
-	if (m_BackgroundColor == 0)
-	{
-		hr = DrawDeck();
-		if (hr != S_OK) return S_FALSE;
-	}
-	
 	// GetTexture() doesn't AddRef, so doesn't need to be released
 	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
 	if (hr != S_OK) return S_FALSE;
@@ -284,12 +278,19 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 	HRESULT hr = S_FALSE;
 
-	//InfoTexture2D InfoRTV = {};
-	//InfoTexture2D InfoSRV = {};
-	//hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
-	//hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
+#ifdef _DEBUG
+	InfoTexture2D InfoRTV = {};
+	InfoTexture2D InfoSRV = {};
+	hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
+	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
+#endif
 
-	if (m_BackgroundColor >= 1)
+	if (m_BackgroundColor == 0)
+	{
+		hr = DrawDeck();
+		if (hr != S_OK) return S_FALSE;
+	}
+	else
 	{
 		D3DXCOLOR Color;
 		if (m_BackgroundColor == 1) Color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
