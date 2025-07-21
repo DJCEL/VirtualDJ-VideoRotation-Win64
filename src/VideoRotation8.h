@@ -3,9 +3,10 @@
 
 
 #include "vdjVideo8.h"
-#include <d3d11.h>
+#include <d3d11_1.h>
 #include <directxmath.h>
 #include <stdio.h>
+#include <math.h> // for the function floor()
 
 #pragma comment(lib, "d3d11.lib")   // Direct3D11 library
 
@@ -101,8 +102,8 @@ private:
 	HRESULT Update_ConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
 	HRESULT Update_NewVertices_D3D11();
 	HRESULT Update_ConstantBufferData_D3D11();
-	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D *info);
-	HRESULT GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D *info);
+	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info);
+	HRESULT GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info);
 
 	DirectX::XMMATRIX SetViewMatrix_D3D11();
 	DirectX::XMMATRIX SetProjectionMatrix_D3D11();
@@ -139,6 +140,7 @@ private:
 	int m_RotationDisk;
 	int m_BackgroundColor;
 	int m_HoldDisk;
+	int m_Beats;
 
 	typedef enum _ID_Interface
 	{
@@ -152,8 +154,11 @@ private:
 		ID_RADIO_3,
 		ID_SWITCH_1,
 		ID_SWITCH_2,
-		ID_SWITCH_3
+		ID_SWITCH_3,
+		ID_SWITCH_4
 	} ID_Interface;
+
+	const float MAX_BEATS = 64.0f;
 
 	#ifndef SAFE_RELEASE
 	#define SAFE_RELEASE(x) { if (x!=nullptr) { x->Release(); x=nullptr; } }

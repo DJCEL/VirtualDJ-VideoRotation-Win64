@@ -32,6 +32,7 @@ CVideoRotation8::CVideoRotation8()
 	m_BackgroundColor = 0;
 	m_Angle = 0;
 	m_HoldDisk = 0;
+	m_Beats = 0;
 }
 //------------------------------------------------------------------------------------------
 CVideoRotation8::~CVideoRotation8()
@@ -53,7 +54,7 @@ HRESULT VDJ_API CVideoRotation8::OnLoad()
 	hr = DeclareParameterSwitch(&m_RotationInverted, ID_SWITCH_1, "Inverted", "INV", 0.0f);
 	hr = DeclareParameterSwitch(&m_RotationDisk, ID_SWITCH_2, "Scratch", "S", 0.0f);
 	hr = DeclareParameterSwitch(&m_HoldDisk, ID_SWITCH_3, "Scratch Hold", "SH", 0.0f);
-
+	hr = DeclareParameterSwitch(&m_Beats, ID_SWITCH_4, "Beats", "B", 0.0f);
 	
 	hr = OnParameter(ID_INIT);
 
@@ -66,7 +67,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "VideoRotation";
 	info->Description = "Rotation of the Video.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY | VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "3.4 (64-bit)";
+	info->Version = "3.5 (64-bit)";
 
 	return S_OK;
 }
@@ -85,6 +86,9 @@ HRESULT VDJ_API CVideoRotation8::OnParameter(int id)
 	}
 	else OnSlider(id);
 
+	if(id == ID_SWITCH_4) OnSlider(ID_SLIDER_3);
+
+
 	return S_OK;
 }
 
@@ -102,7 +106,14 @@ void CVideoRotation8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_3:
-			m_Speed = m_SliderValue[2] * 5.0f;
+			if (m_Beats)
+			{
+				m_Speed = (float) floor(m_SliderValue[2] * MAX_BEATS);
+			}
+			else
+			{
+				m_Speed = m_SliderValue[2] * 5.0f;
+			}
 			break;
 
 		case ID_SLIDER_4:
@@ -129,6 +140,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetParameterString(int id, char* outParam, in
 
 		case ID_SLIDER_3:
 			if (m_Speed == 0) sprintf_s(outParam, outParamSize, "Off");
+			else if (m_Beats) sprintf_s(outParam, outParamSize, "%.0f beat(s)", m_Speed);
 			else sprintf_s(outParam, outParamSize, "%.2f", m_Speed * 100.0f);
 			break;
 
@@ -271,13 +283,11 @@ void CVideoRotation8::Release_D3D11()
 HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
-	
-#ifdef _DEBUG
-	InfoTexture2D InfoRTV = {};
-	InfoTexture2D InfoSRV = {};
-	hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
-	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
-#endif	
+
+	//InfoTexture2D InfoRTV = {};
+	//InfoTexture2D InfoSRV = {};
+	//hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
+	//hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
 
 	if (m_BackgroundColor >= 1)
 	{
@@ -303,7 +313,6 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 		if (hold == 0.0f) return S_OK;
 	}
 
-	
 	hr = Update_VertexBufferDynamic_D3D11(pDeviceContext);
 	if (hr != S_OK) return S_FALSE;
 
@@ -454,9 +463,9 @@ HRESULT CVideoRotation8::Create_InputLayout_D3D11(ID3D11Device* pDevice)
 	};
 
 	UINT numElements = ARRAYSIZE(InputElmentDesc);
+
 	const WCHAR* resourceType = RT_RCDATA;
 	const WCHAR* resourceName = L"VERTEXSHADER8_CSO";
-
 	void* pShaderBytecode = nullptr;
 	SIZE_T BytecodeLength = 0;
 
@@ -476,7 +485,7 @@ HRESULT CVideoRotation8::Create_RasterizerState_D3D11(ID3D11Device* pDevice)
 	D3D11_RASTERIZER_DESC RasterizerDesc;
 	ZeroMemory(&RasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	RasterizerDesc.CullMode = D3D11_CULL_NONE; //  D3D11_CULL_FRONT or D3D11_CULL_BACK; 
+	RasterizerDesc.CullMode = D3D11_CULL_NONE; // D3D11_CULL_FRONT or D3D11_CULL_BACK; 
 	RasterizerDesc.FrontCounterClockwise = TRUE;
 
 	hr = pDevice->CreateRasterizerState(&RasterizerDesc, &pRasterizerState);
@@ -681,6 +690,23 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 		hr = GetInfo("get_rotation", &x);
 		if (hr != S_OK) x = 0.0f;
 
+		if (m_RotationInverted)
+		{
+			m_Angle = (-1.0f) * float(x) * 360.0f;
+		}
+		else
+		{
+			m_Angle = float(x) * 360.0f;
+		}
+	}
+	else if (m_Beats)
+	{
+		if (m_Speed == 0) x = 0;
+		else
+		{
+			x = fmod(SongPosBeats, m_Speed) / m_Speed;
+		}
+			
 		if (m_RotationInverted)
 		{
 			m_Angle = (-1.0f) * float(x) * 360.0f;

@@ -1,5 +1,7 @@
-﻿// Microsoft Visual C++ generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
+#pragma code_page(65001)
+
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -50,7 +52,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,3,0,0
+ FILEVERSION 3,5,0,0
  PRODUCTVERSION 8,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -68,7 +70,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "http://www.virtualdj.com/blog/djcel"
             VALUE "FileDescription", "VirtualDJ Video Effect"
-            VALUE "FileVersion", "3.3.0.0"
+            VALUE "FileVersion", "3.5.0.0"
             VALUE "InternalName", "VideoRotation"
             VALUE "LegalCopyright", "Copyright (C) 2025 djcel"
             VALUE "OriginalFilename", "VideoRotation"
@@ -88,8 +90,9 @@ END
 // RCDATA
 //
 
-VERTEXSHADER8_CSO        RCDATA                  ".\Shaders\VertexShader.cso"
-PIXELSHADER8_CSO         RCDATA                  ".\Shaders\PixelShader.cso"
+VERTEXSHADER8_CSO       RCDATA                  ".\\Shaders\\VertexShader.cso"
+
+PIXELSHADER8_CSO        RCDATA                  ".\\Shaders\\PixelShader.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////
