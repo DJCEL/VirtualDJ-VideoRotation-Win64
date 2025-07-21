@@ -681,8 +681,6 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 		hr = GetInfo("get_rotation", &x);
 		if (hr != S_OK) x = 0.0f;
 
-		m_Angle = float(x) * 360.0f;
-
 		if (m_RotationInverted)
 		{
 			m_Angle = (-1.0f) * float(x) * 360.0f;
