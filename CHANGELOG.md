@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5 (2025-07-21)
+
+**Added:**
+- Rotation based on beats
+
 ## 3.4 (2025-07-20)
 
 **Fixed:**
