@@ -272,8 +272,10 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 {
 	HRESULT hr = S_FALSE;
 
-	//hr = GetInfoFromRenderTargetView(pRenderTargetView);
-	//hr = GetInfoFromShaderResourceView(pTextureView);
+	//InfoTexture2D InfoRTV = {};
+	//InfoTexture2D InfoSRV = {};
+	//hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
+	//hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
 
 	if (m_BackgroundColor >= 1)
 	{
@@ -731,7 +733,7 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 	return WorldMatrix;
 }
 //-----------------------------------------------------------------------
-HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView)
+HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
@@ -740,7 +742,7 @@ HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView*
 
 	pShaderResourceView->GetDesc(&viewDesc);
 
-	DXGI_FORMAT dxFormat1 = viewDesc.Format;
+	DXGI_FORMAT ViewFormat = viewDesc.Format;
 	D3D11_SRV_DIMENSION ViewDimension = viewDesc.ViewDimension;
 
 	ID3D11Resource* pResource = nullptr;
@@ -758,9 +760,9 @@ HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView*
 
 		pTexture->GetDesc(&textureDesc);
 
-		DXGI_FORMAT dxFormat2 = textureDesc.Format;
-		UINT TextureWidth = textureDesc.Width;
-		UINT TextureHeight = textureDesc.Height;
+		info->Format = textureDesc.Format;
+		info->Width = textureDesc.Width;
+		info->Height = textureDesc.Height;
 
 		SAFE_RELEASE(pTexture);
 	}
@@ -770,7 +772,7 @@ HRESULT CVideoRotation8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView*
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CVideoRotation8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView)
+HRESULT CVideoRotation8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
@@ -779,7 +781,7 @@ HRESULT CVideoRotation8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRe
 
 	pRenderTargetView->GetDesc(&viewDesc);
 
-	DXGI_FORMAT dxFormat1 = viewDesc.Format;
+	DXGI_FORMAT ViewFormat = viewDesc.Format;
 	D3D11_RTV_DIMENSION ViewDimension = viewDesc.ViewDimension;
 
 	ID3D11Resource* pResource = nullptr;
@@ -797,9 +799,9 @@ HRESULT CVideoRotation8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRe
 
 		pTexture->GetDesc(&textureDesc);
 
-		DXGI_FORMAT dxFormat2 = textureDesc.Format;
-		UINT TextureWidth = textureDesc.Width;
-		UINT TextureHeight = textureDesc.Height;
+		info->Format = textureDesc.Format;
+		info->Width = textureDesc.Width;
+		info->Height = textureDesc.Height;
 
 		SAFE_RELEASE(pTexture);
 	}
