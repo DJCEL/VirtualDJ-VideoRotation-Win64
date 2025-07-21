@@ -208,10 +208,6 @@ HRESULT VDJ_API CVideoRotation8::OnDraw()
 		OnResizeVideo();
 	}
 
-	// GetTexture() doesn't AddRef, so doesn't need to be released
-	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
-	if (hr != S_OK) return S_FALSE;
-
 	if (!pD3DDevice) return S_FALSE;
 
 	pD3DDevice->GetImmediateContext(&pD3DDeviceContext);
@@ -219,6 +215,10 @@ HRESULT VDJ_API CVideoRotation8::OnDraw()
 
 	pD3DDeviceContext->OMGetRenderTargets(1, &pD3DRenderTargetView, nullptr);
 	if (!pD3DRenderTargetView) return S_FALSE;
+
+	// GetTexture() doesn't AddRef, so doesn't need to be released
+	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
+	if (hr != S_OK) return S_FALSE;
 
 	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTextureView, vertices);
 	if (hr != S_OK) return S_FALSE;
