@@ -477,7 +477,7 @@ HRESULT CVideoRotation8::Create_RasterizerState_D3D11(ID3D11Device* pDevice)
 	D3D11_RASTERIZER_DESC RasterizerDesc;
 	ZeroMemory(&RasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
-	RasterizerDesc.CullMode = D3D11_CULL_NONE; //  D3D11_CULL_NONE;  // D3D11_CULL_FRONT; 
+	RasterizerDesc.CullMode = D3D11_CULL_NONE; //  D3D11_CULL_FRONT or D3D11_CULL_BACK; 
 	RasterizerDesc.FrontCounterClockwise = TRUE;
 
 	hr = pDevice->CreateRasterizerState(&RasterizerDesc, &pRasterizerState);
