@@ -271,11 +271,13 @@ void CVideoRotation8::Release_D3D11()
 HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
-
-	//InfoTexture2D InfoRTV = {};
-	//InfoTexture2D InfoSRV = {};
-	//hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
-	//hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
+	
+#ifdef _DEBUG
+	InfoTexture2D InfoRTV = {};
+	InfoTexture2D InfoSRV = {};
+	hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
+	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
+#endif	
 
 	if (m_BackgroundColor >= 1)
 	{
