@@ -1,5 +1,5 @@
 ###############################################################################
-# Visual Studio 2022 - Exclude folders and files
+# Visual Studio 2022 - Exclude the folders and files below
 ###############################################################################
 /VS2022/.vs/
 /VS2022/Debug/
