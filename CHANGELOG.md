@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.1 (2025-08-09)
+- Zoom maximum value increased to 180 (hidden)
+- Minor fixes
+
 ## 3.5 (2025-07-21)
 
 **Added:**
