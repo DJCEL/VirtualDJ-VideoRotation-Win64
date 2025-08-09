@@ -32,13 +32,13 @@ public:
 	HRESULT VDJ_API OnAudioSamples(float* buffer, int nb);
 
 private:
-	struct D3DXPOSITION
+	struct D3DXPOSITION //DirectX::XMFLOAT3
 	{
 		float x;
 		float y;
 		float z;
 	};
-	struct D3DXCOLOR
+	struct D3DXCOLOR //DirectX::XMFLOAT4
 	{
 	public:
 		D3DXCOLOR() = default;
@@ -57,7 +57,7 @@ private:
 
 		FLOAT r, g, b, a;
 	};
-	struct D3DXTEXCOORD
+	struct D3DXTEXCOORD //DirectX::XMFLOAT2
 	{
 		float tu;
 		float tv;
