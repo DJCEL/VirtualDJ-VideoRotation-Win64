@@ -65,7 +65,7 @@ HRESULT VDJ_API CVideoRotation8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "VideoRotation";
 	info->Description = "Rotation of the Video.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY | VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "3.5 (64-bit)";
+	info->Version = "3.5.1 (64-bit)";
 
 	return S_OK;
 }
@@ -293,12 +293,11 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 		D3DXCOLOR Color;
 		if (m_BackgroundColor == 1) Color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 		else if (m_BackgroundColor == 2) Color = D3DXCOLOR(0.1f, 0.2f, 0.6f, 1.0f);
-		else if (m_BackgroundColor == 3) Color = D3DXCOLOR(1.10f, 1.0f, 1.0f, 1.0f);
+		else if (m_BackgroundColor == 3) Color = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		else Color = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
 
 		FLOAT ColorRGBA[4] = {Color.r, Color.g, Color.b, Color.a};
 		pDeviceContext->ClearRenderTargetView(pRenderTargetView, ColorRGBA);
-
 		pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
 	}
 
