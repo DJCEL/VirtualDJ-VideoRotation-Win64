@@ -43,7 +43,7 @@ HRESULT VDJ_API CVideoRotation8::OnLoad()
 	HRESULT hr = S_FALSE;
 
 	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Transparency", "TR", 1.0f);
-	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "Zoom", "ZOOM", 0.22f);
+	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "Zoom", "ZOOM", 0.14f);
 	hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "Speed", "SPEED", 0.08f);
 	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "BackgroundColor", "COLR", 0.25f);
 	hr = DeclareParameterRadio(&m_RotationAxe, ID_RADIO_1, "Rotation X", "ROTX", 0.0f);
@@ -100,7 +100,7 @@ void CVideoRotation8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_2:
-			m_Zoom = 30.0f + m_SliderValue[1] * (120.0f - 30.0f);
+			m_Zoom = 30.0f + m_SliderValue[1] * (180.0f - 30.0f);
 			break;
 
 		case ID_SLIDER_3:
@@ -747,7 +747,7 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 	}
 
 	// Center point of the rotation
-	D3DXPOSITION Co = { (float) m_Width / 2.0f , (float) m_Height / 2.0f , 0.0f };
+	D3DXPOSITION Co = { (float) m_Width / 2.0f , (float) m_Height / 2.0f , 0.5f };
 
 	DirectX::XMMATRIX TranslationMatrix1 = DirectX::XMMatrixTranslation(-Co.x, -Co.y, -Co.z);
 	DirectX::XMMATRIX TranslationMatrix2 = DirectX::XMMatrixTranslation(Co.x, Co.y, Co.z);
