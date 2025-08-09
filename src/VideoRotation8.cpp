@@ -747,7 +747,7 @@ DirectX::XMMATRIX CVideoRotation8::SetWorldMatrix_D3D11()
 	}
 
 	// Center point of the rotation
-	D3DXPOSITION Co = { (float) m_Width / 2.0f , (float) m_Height / 2.0f , 0.5f };
+	D3DXPOSITION Co = { (float) m_Width / 2.0f , (float) m_Height / 2.0f , 0.0f };
 
 	DirectX::XMMATRIX TranslationMatrix1 = DirectX::XMMatrixTranslation(-Co.x, -Co.y, -Co.z);
 	DirectX::XMMATRIX TranslationMatrix2 = DirectX::XMMatrixTranslation(Co.x, Co.y, Co.z);
