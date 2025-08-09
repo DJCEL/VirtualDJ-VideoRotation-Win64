@@ -123,8 +123,6 @@ private:
 
 	TLVERTEX pNewVertices[4];
 	UINT m_VertexCount;
-	UINT m_VertexStride;
-	UINT m_VertexOffset;
 	bool m_Direct3D_On;
 	int m_WidthOnDeviceInit;
 	int m_HeightOnDeviceInit;

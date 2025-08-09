@@ -21,8 +21,6 @@ CVideoRotation8::CVideoRotation8()
 	m_Width = 0;
 	m_Height = 0;
 	m_VertexCount = 0;
-	m_VertexStride = 0;
-	m_VertexOffset = 0;
 	m_Alpha = 1.0f;
 	m_Zoom = 0.0f;
 	m_Speed = 0.0f;
@@ -357,6 +355,8 @@ HRESULT CVideoRotation8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceCont
 
 	if (pVertexBuffer)
 	{
+		UINT m_VertexStride = sizeof(TLVERTEX);;
+		UINT m_VertexOffset = 0;
 		pDeviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
 
@@ -372,9 +372,7 @@ HRESULT CVideoRotation8::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 	if (!pDevice) return E_FAIL;
 
 	// Set the number of vertices in the vertex array.
-	m_VertexStride = sizeof(TLVERTEX);
 	m_VertexCount = 4; // = ARRAYSIZE(pNewVertices);
-	m_VertexOffset = 0;
 
 	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
