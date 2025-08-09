@@ -488,7 +488,7 @@ HRESULT CVideoRotation8::Create_RasterizerState_D3D11(ID3D11Device* pDevice)
 	RasterizerDesc.FillMode = D3D11_FILL_SOLID;
 	RasterizerDesc.CullMode = D3D11_CULL_NONE; // we use NONE because we want both faces (D3D11_CULL_FRONT or D3D11_CULL_BACK or D3D11_CULL_NONE); 
 	RasterizerDesc.FrontCounterClockwise = TRUE; // CCW = front
-	RasterizerDesc.DepthClipEnable = TRUE;
+	//RasterizerDesc.DepthClipEnable = TRUE;
 
 	hr = pDevice->CreateRasterizerState(&RasterizerDesc, &pRasterizerState);
 	if (hr != S_OK || !pRasterizerState) return S_FALSE;
